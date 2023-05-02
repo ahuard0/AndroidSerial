@@ -1,0 +1,107 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="de.kai_morich.simple_usb_terminal"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="18"
+8-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="33" />
+9-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+11-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:5:5-77
+11-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:5:22-74
+12
+13    <permission
+13-->[androidx.core:core:1.9.0] C:\Users\andre\.gradle\caches\transforms-3\8c25e88eb4ea76e8f3d0900731d8ae12\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+14        android:name="de.kai_morich.simple_usb_terminal.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+14-->[androidx.core:core:1.9.0] C:\Users\andre\.gradle\caches\transforms-3\8c25e88eb4ea76e8f3d0900731d8ae12\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+15        android:protectionLevel="signature" />
+15-->[androidx.core:core:1.9.0] C:\Users\andre\.gradle\caches\transforms-3\8c25e88eb4ea76e8f3d0900731d8ae12\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
+16
+17    <uses-permission android:name="de.kai_morich.simple_usb_terminal.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" /> <!-- mipmap/ic_launcher created with Android Studio -> New -> Image Asset using @color/colorPrimaryDark as background color -->
+17-->[androidx.core:core:1.9.0] C:\Users\andre\.gradle\caches\transforms-3\8c25e88eb4ea76e8f3d0900731d8ae12\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+17-->[androidx.core:core:1.9.0] C:\Users\andre\.gradle\caches\transforms-3\8c25e88eb4ea76e8f3d0900731d8ae12\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+18    <application
+18-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:8:5-34:19
+19        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+19-->[androidx.core:core:1.9.0] C:\Users\andre\.gradle\caches\transforms-3\8c25e88eb4ea76e8f3d0900731d8ae12\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
+20        android:debuggable="true"
+21        android:icon="@mipmap/ic_launcher"
+21-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:9:9-43
+22        android:label="@string/app_name"
+22-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:10:9-41
+23        android:theme="@style/AppTheme" >
+23-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:11:9-40
+24
+25        <!--
+26                 for this simple app launchMode=singleTask and singleTop have same effect.
+27                 If you would start another activity in the app, e.g. Android Settings
+28                 then you should use singleTask, else a new MainActivity would be started
+29                 when the settings activity is currently shown
+30        -->
+31        <activity
+31-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:17:9-32:20
+32            android:name="de.kai_morich.simple_usb_terminal.MainActivity"
+32-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:18:13-41
+33            android:exported="true"
+33-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:21:13-36
+34            android:launchMode="singleTask"
+34-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:19:13-44
+35            android:windowSoftInputMode="stateHidden|adjustResize" >
+35-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:20:13-67
+36            <intent-filter>
+36-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:22:13-25:29
+37                <action android:name="android.intent.action.MAIN" />
+37-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:23:17-69
+37-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:23:25-66
+38
+39                <category android:name="android.intent.category.LAUNCHER" />
+39-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:24:17-77
+39-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:24:27-74
+40            </intent-filter>
+41            <intent-filter>
+41-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:26:13-28:29
+42                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+42-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:27:17-90
+42-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:27:25-87
+43            </intent-filter>
+44
+45            <meta-data
+45-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:29:13-31:61
+46                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+46-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:30:17-79
+47                android:resource="@xml/usb_device_filter" />
+47-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:31:17-58
+48        </activity>
+49
+50        <service android:name="de.kai_morich.simple_usb_terminal.SerialService" />
+50-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:33:9-50
+50-->E:\SimpleUsbTerminal\app\src\main\AndroidManifest.xml:33:18-47
+51
+52        <provider
+52-->[androidx.emoji2:emoji2:1.2.0] C:\Users\andre\.gradle\caches\transforms-3\3d235ed602f65236d1e967aa3ae41734\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+53            android:name="androidx.startup.InitializationProvider"
+53-->[androidx.emoji2:emoji2:1.2.0] C:\Users\andre\.gradle\caches\transforms-3\3d235ed602f65236d1e967aa3ae41734\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+54            android:authorities="de.kai_morich.simple_usb_terminal.androidx-startup"
+54-->[androidx.emoji2:emoji2:1.2.0] C:\Users\andre\.gradle\caches\transforms-3\3d235ed602f65236d1e967aa3ae41734\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+55            android:exported="false" >
+55-->[androidx.emoji2:emoji2:1.2.0] C:\Users\andre\.gradle\caches\transforms-3\3d235ed602f65236d1e967aa3ae41734\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+56            <meta-data
+56-->[androidx.emoji2:emoji2:1.2.0] C:\Users\andre\.gradle\caches\transforms-3\3d235ed602f65236d1e967aa3ae41734\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+57                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+57-->[androidx.emoji2:emoji2:1.2.0] C:\Users\andre\.gradle\caches\transforms-3\3d235ed602f65236d1e967aa3ae41734\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+58                android:value="androidx.startup" />
+58-->[androidx.emoji2:emoji2:1.2.0] C:\Users\andre\.gradle\caches\transforms-3\3d235ed602f65236d1e967aa3ae41734\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+59            <meta-data
+59-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\andre\.gradle\caches\transforms-3\74479ed0ca537f847c79c9f1d11b43a4\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+60                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+60-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\andre\.gradle\caches\transforms-3\74479ed0ca537f847c79c9f1d11b43a4\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+61                android:value="androidx.startup" />
+61-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\andre\.gradle\caches\transforms-3\74479ed0ca537f847c79c9f1d11b43a4\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+62        </provider>
+63    </application>
+64
+65</manifest>
