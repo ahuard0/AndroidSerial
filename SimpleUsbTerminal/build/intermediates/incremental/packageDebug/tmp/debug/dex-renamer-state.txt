@@ -1,4 +1,0 @@
-#Sun May 14 03:17:47 PDT 2023
-base.0=E\:\\AndroidSerial\\SimpleUsbTerminal\\build\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
-path.0=classes.dex
-renamed.0=classes.dex
