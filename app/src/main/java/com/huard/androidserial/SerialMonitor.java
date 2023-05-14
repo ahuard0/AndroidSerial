@@ -89,15 +89,6 @@ public class SerialMonitor extends Thread {
         SerialMonitor.findEndpoints();
     }
 
-    public static void openDevice() {
-        if (device != null)
-            connection = manager.openDevice(device);  // USB HOST
-    }
-
-    public static void claimInterface() {
-        connection.claimInterface(usbInterface, true);
-    }
-
     private static void findInterface() {
         usbInterface = device.getInterface(1);
     }
@@ -153,10 +144,9 @@ public class SerialMonitor extends Thread {
         int idx_footer;
 
         StringBuilder searchStr = new StringBuilder();
-        String msg = "";
+        String msg;
 
         SerialMonitor.initialize();
-
 
         List<UsbSerialDriver> availableDrivers = UsbSerialProber.getDefaultProber().findAllDrivers(manager);
         UsbSerialDriver driver = availableDrivers.get(0);
@@ -176,7 +166,7 @@ public class SerialMonitor extends Thread {
 
 
         while(true) {
-            synchronized (connection) {
+            synchronized (this) {
 
                 int receivedBytes = connection.bulkTransfer(inputEndpoint, buffer, buffer.length, 1000);
 
@@ -184,10 +174,7 @@ public class SerialMonitor extends Thread {
                 if (receivedBytes < 0) { // Error occurred
                     Log.d("USB", "Received bytes (error): " + receivedBytes);
                 } else {
-                    // Convert the received data to a string
-                    String receivedData = new String(buffer, 0, receivedBytes);
-                    //Log.d("USB", "Received bytes: " + receivedBytes);
-                    //Log.d("USB", "Received data: " + receivedData);
+                    String receivedData = new String(buffer, 0, receivedBytes);  // Convert the received data to a string
 
                     searchStr.append(receivedData);
                     idx_header = searchStr.indexOf("#");
@@ -205,17 +192,14 @@ public class SerialMonitor extends Thread {
                                 msg = searchStr.substring(idx_header, idx_footer);
                             } catch (StringIndexOutOfBoundsException e) {
                                 Log.e("USB", "Index Out of Bounds Error: " + searchStr);
+                                return;
                             }
                             Log.d("USB", "Received message: " + msg);
-                        } else {  // no header was found, reject the message
                         }
                         searchStr = new StringBuilder();
                     }
-
-
                 }
             }
-
         }
     }
 }

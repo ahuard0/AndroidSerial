@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="baud_rates">
+        <item>2400</item>
+        <item>9600</item>
+        <item>19200</item>
+        <item>57600</item>
+        <item>115200</item>
+    </string-array>
+    <string-array name="newline_names">
+        <item>CR+LF</item>
+        <item>LF</item>
+        <item>&lt;none></item>
+    </string-array>
+    <string-array name="newline_values">
+        <item>\u000d\u000a</item>
+        <item>\u000a</item>
+        <item/>
+    </string-array>
+    <color name="colorAccent">#ff6e40</color>
+    <color name="colorPrimary">#d84315</color>
+    <color name="colorPrimaryDark">#bf360c</color>
+    <color name="colorRecieveText">#00FF00</color>
+    <color name="colorSendText">#82CAFF</color>
+    <color name="colorStatusText">#FFDB58</color>
+    <string name="app_name">Simple USB Terminal</string>
+    <string name="devices">USB Devices</string>
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+</resources>
