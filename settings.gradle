@@ -15,5 +15,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AndroidSerial"
 include ':app'
-include ':app:serial'
-include ':SimpleUsbTerminal'
+include ':app:alerts'

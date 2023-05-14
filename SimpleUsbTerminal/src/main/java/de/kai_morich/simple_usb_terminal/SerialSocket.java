@@ -81,7 +81,7 @@ public class SerialSocket implements SerialInputOutputManager.Listener {
         }
     }
 
-    void write(byte[] data) throws IOException {
+    public void write(byte[] data) throws IOException {
         if(serialPort == null)
             throw new IOException("not connected");
         serialPort.write(data, WRITE_WAIT_MILLIS);

@@ -220,7 +220,6 @@ public class SerialService extends Service implements SerialListener {
      * reduce number of UI updates by merging data chunks.
      * Data can arrive at hundred chunks per second, but the UI can only
      * perform a dozen updates if receiveText already contains much text.
-     *
      * On new data inform UI thread once (1).
      * While not consumed (2), add more data (3).
      */
