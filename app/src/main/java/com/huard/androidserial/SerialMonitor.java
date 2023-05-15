@@ -24,6 +24,8 @@ public class SerialMonitor extends Thread {
     public static UsbManager manager;
     public static UsbInterface usbInterface;
 
+    private boolean running;
+
     public static void logDiagnostics() {
         if (device != null) {  // permission granted, do something with the device
 
@@ -109,7 +111,11 @@ public class SerialMonitor extends Thread {
         }
     }
 
-    private void write(String command) {
+    public void quit() {
+        running = false;
+    }
+
+    public void write(String command) {
         if (device != null) {  // permission granted, do something with the device
 
             byte[] buffer = command.getBytes();
@@ -129,19 +135,13 @@ public class SerialMonitor extends Thread {
         }
     }
 
-    public static void closeDevice() {
-        if (connection != null) {
-            if (usbInterface != null)
-                connection.releaseInterface(usbInterface);
-            connection.close();
-        }
-    }
-
     @Override
     public void run() {
         byte[] buffer = new byte[64];
         int idx_header;
         int idx_footer;
+
+        running = true;
 
         StringBuilder searchStr = new StringBuilder();
         String msg;
@@ -150,7 +150,8 @@ public class SerialMonitor extends Thread {
 
         List<UsbSerialDriver> availableDrivers = UsbSerialProber.getDefaultProber().findAllDrivers(manager);
         UsbSerialDriver driver = availableDrivers.get(0);
-        connection = manager.openDevice(driver.getDevice());
+        device = driver.getDevice();
+        connection = manager.openDevice(device);
 
         List<UsbSerialPort> ports = driver.getPorts();
         UsbSerialPort port = ports.get(0);
@@ -165,14 +166,14 @@ public class SerialMonitor extends Thread {
         }
 
 
-        while(true) {
+        while(running) {
             synchronized (this) {
 
                 int receivedBytes = connection.bulkTransfer(inputEndpoint, buffer, buffer.length, 1000);
 
 
                 if (receivedBytes < 0) { // Error occurred
-                    Log.d("USB", "Received bytes (error): " + receivedBytes);
+                    //Log.d("USB", "Received bytes (error): " + receivedBytes);
                 } else {
                     String receivedData = new String(buffer, 0, receivedBytes);  // Convert the received data to a string
 

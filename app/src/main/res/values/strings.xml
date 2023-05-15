@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">AndroidSerial</string>
+    <string name="connect">Connect</string>
+    <string name="d3_on">D3 (ON)</string>
+    <string name="d4_on">D4 (ON)</string>
+    <string name="d5_on">D5 (ON)</string>
+    <string name="d6_on">D6 (ON)</string>
+    <string name="d7_on">D7 (ON)</string>
+    <string name="d8_on">D8 (ON)</string>
+    <string name="d9_on">D9 (ON)</string>
+    <string name="d3_off">D3 (OFF)</string>
+    <string name="d4_off">D4 (OFF)</string>
+    <string name="d5_off">D5 (OFF)</string>
+    <string name="d6_off">D6 (OFF)</string>
+    <string name="d7_off">D7 (OFF)</string>
+    <string name="d8_off">D8 (OFF)</string>
+    <string name="d9_off">D9 (OFF)</string>
 </resources>
