@@ -15,4 +15,10 @@
     <string name="d7_off">D7 (OFF)</string>
     <string name="d8_off">D8 (OFF)</string>
     <string name="d9_off">D9 (OFF)</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="usb_terminal_output">USB Terminal Output</string>
+    <string name="not_connected">Not Connected</string>
+    <string name="broadcast_on">Broadcast (ON)</string>
+    <string name="broadcast_off">Broadcast (OFF)</string>
+    <string name="single_read">Single Read</string>
 </resources>

@@ -1,46 +1,53 @@
 package com.huard.androidserial;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 
-import java.util.HashMap;
+public class MainActivity extends AppCompatActivity implements StatusConnectedListener, StatusTerminalListener {
 
+    private SerialClient client;
 
-public class MainActivity extends AppCompatActivity {
-
-    private static final String ACTION_USB_PERMISSION = "com.huard.androidserial.USB_PERMISSION";
-    private PendingIntent intentPermissionUSB;
-    private static final int USB_VENDOR_ID = 10755; // Arduino
-    private static final int USB_PRODUCT_ID = 67; // Arduino Uno
-
-    private static SerialMonitor monitor;
+    private TextView lblTerminal;
+    private TextView lblConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SerialMonitor.manager = (UsbManager) getSystemService(Context.USB_SERVICE);
+        initialize();
+        connect();
+    }
 
-        intentPermissionUSB = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
+    private Handler statusConnectionHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            String message = (String) msg.obj;
+            updateConnectionStatus(message);
+        }
+    };
 
-        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
-        registerReceiver(mUsbReceiver, filter);
+    private Handler statusTerminalHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            String message = (String) msg.obj;
+            updateTerminalStatus(message);
+        }
+    };
 
-        requestUsbPermission();
+    private void initialize() {
+        lblTerminal = findViewById(R.id.lblTerminal);
+        lblConnected = findViewById(R.id.lblConnected);
 
         Button btnConnect = findViewById(R.id.btnConnect);
+        Button btnDisconnect = findViewById(R.id.btnDisconnect);
+
         Button btnOnD3 = findViewById(R.id.btnOnD3);
         Button btnOnD4 = findViewById(R.id.btnOnD4);
         Button btnOnD5 = findViewById(R.id.btnOnD5);
@@ -56,7 +63,13 @@ public class MainActivity extends AppCompatActivity {
         Button btnOffD8 = findViewById(R.id.btnOffD8);
         Button btnOffD9 = findViewById(R.id.btnOffD9);
 
-        btnConnect.setOnClickListener(v -> requestUsbPermission());
+        Button btnBroadcastOn = findViewById(R.id.btnBroadcastOn);
+        Button btnBroadcastOff = findViewById(R.id.btnBroadcastOff);
+        Button btnSingleRead = findViewById(R.id.btnSingleRead);
+
+        btnConnect.setOnClickListener(v -> onPressConnect());
+        btnDisconnect.setOnClickListener(v -> onPressDisconnect());
+
         btnOnD3.setOnClickListener(v -> onPressOnD3());
         btnOnD4.setOnClickListener(v -> onPressOnD4());
         btnOnD5.setOnClickListener(v -> onPressOnD5());
@@ -71,138 +84,125 @@ public class MainActivity extends AppCompatActivity {
         btnOffD7.setOnClickListener(v -> onPressOffD7());
         btnOffD8.setOnClickListener(v -> onPressOffD8());
         btnOffD9.setOnClickListener(v -> onPressOffD9());
+
+        btnBroadcastOn.setOnClickListener(v -> onPressBroadcastOn());
+        btnBroadcastOff.setOnClickListener(v -> onPressBroadcastOff());
+        btnSingleRead.setOnClickListener(v -> onPressSingleRead());
+    }
+
+    public void updateTerminalStatus(String msg) {
+        lblTerminal.setText(msg);
+    }
+
+    public void updateConnectionStatus(String msg) {
+        lblConnected.setText(msg);
+    }
+
+    private void onPressConnect() {
+        connect();
+    }
+
+    private void onPressDisconnect() {
+        disconnect();
     }
 
     private void onPressOnD3() {
-        monitor.write("$|_D3_ON");
+        client.write("$|_D3_ON\n");
     }
 
     private void onPressOnD4() {
-        monitor.write("$|_D4_ON");
+        client.write("$|_D4_ON\n");
     }
 
     private void onPressOnD5() {
-        monitor.write("$|_D5_ON");
+        client.write("$|_D5_ON\n");
     }
 
     private void onPressOnD6() {
-        monitor.write("$|_D6_ON");
+        client.write("$|_D6_ON\n");
     }
 
     private void onPressOnD7() {
-        monitor.write("$|_D7_ON");
+        client.write("$|_D7_ON\n");
     }
 
     private void onPressOnD8() {
-        monitor.write("$|_D8_ON");
+        client.write("$|_D8_ON\n");
     }
 
     private void onPressOnD9() {
-        monitor.write("$|_D9_ON");
+        client.write("$|_D9_ON\n");
     }
 
     private void onPressOffD3() {
-        monitor.write("$|_D3_OFF");
+        client.write("$|_D3_OFF\n");
     }
 
     private void onPressOffD4() {
-        monitor.write("$|_D4_OFF");
+        client.write("$|_D4_OFF\n");
     }
 
     private void onPressOffD5() {
-        monitor.write("$|_D5_OFF");
+        client.write("$|_D5_OFF\n");
     }
 
     private void onPressOffD6() {
-        monitor.write("$|_D6_OFF");
+        client.write("$|_D6_OFF\n");
     }
 
     private void onPressOffD7() {
-        monitor.write("$|_D7_OFF");
+        client.write("$|_D7_OFF\n");
     }
 
     private void onPressOffD8() {
-        monitor.write("$|_D8_OFF");
+        client.write("$|_D8_OFF\n");
     }
 
     private void onPressOffD9() {
-        monitor.write("$|_D9_OFF");
+        client.write("$|_D9_OFF\n");
     }
 
-    private void requestUsbPermission() {
-        HashMap<String, UsbDevice> deviceList = SerialMonitor.manager.getDeviceList();
-        if (!deviceList.isEmpty()) {
-            for (UsbDevice device : deviceList.values()) {
-                if (device.getVendorId() == USB_VENDOR_ID && device.getProductId() == USB_PRODUCT_ID) {
-                    SerialMonitor.device = device;
-                    break;
-                }
-            }
-            if (SerialMonitor.device != null) {
-                SerialMonitor.manager.requestPermission(SerialMonitor.device, intentPermissionUSB);
-            }
-        }
+    private void onPressBroadcastOff() {
+        client.write("$|_BROADCAST_OFF\n");
     }
 
-    private void launchSerialMonitor() {
-        if (monitor != null) {
-            if (monitor.isAlive()) {
-                return;  // serial monitor is alive, do nothing
-            }
-        }
-        monitor = new SerialMonitor();
-        monitor.start();
+    private void onPressBroadcastOn() {
+        client.write("$|_BROADCAST_ON\n");
     }
 
-    private void quitSerialMonitor() {
-        if (monitor != null) {
-            if (!monitor.isAlive()) {
-                monitor.quit();  // gracefully shut down the thread
-            }
-        }
+    private void onPressSingleRead() {
+        client.write("$|_SINGLE_READ\n");
     }
 
-    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, @NonNull Intent intent) {
-            String action = intent.getAction();
-            if (ACTION_USB_PERMISSION.equals(action)) {
-                synchronized (this) {
-                    if (SerialMonitor.device == null) {  // permission denied
-                        SerialMonitor.logDiagnostics();
-                        Log.d("USB", "Permission denied for device");
-                    }
-                    else {  // permission granted, do something with the device
-                        launchSerialMonitor();
-                    }
-                }
-            }
+    private void connect() {
+        if (client == null)
+            client = new SerialClient(getApplicationContext(), statusTerminalHandler, statusConnectionHandler);
+    }
+
+    private void disconnect() {
+        try {
+            client.close();
+        } catch (NullPointerException e) {
+            Log.e("USB", "Attempted to disconnect, but no connection was found");
         }
-    };
+        client = null;
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
-        registerReceiver(mUsbReceiver, filter);
-        if (SerialMonitor.device != null)
-            if (SerialMonitor.manager.hasPermission(SerialMonitor.device))
-                launchSerialMonitor();
+        connect();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(mUsbReceiver);
-        if (SerialMonitor.device != null)
-            if (SerialMonitor.manager.hasPermission(SerialMonitor.device))
-                quitSerialMonitor();
+        disconnect();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mUsbReceiver);
-        quitSerialMonitor();
+        disconnect();
     }
 }
