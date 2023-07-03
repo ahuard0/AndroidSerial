@@ -27,11 +27,19 @@
         android:id="@+id/lblTerminal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:text="@string/usb_terminal_output"
         android:textAlignment="center"
         android:textColor="#007F0A"
         android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,28 +60,28 @@
         android:id="@+id/btnBroadcastOn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="82dp"
+        android:layout_marginTop="120dp"
         android:text="@string/broadcast_on"
-        app:layout_constraintBottom_toTopOf="@+id/btnOnD9"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineChart" />
 
     <Button
         android:id="@+id/btnBroadcastOff"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="82dp"
+        android:layout_marginTop="120dp"
         android:text="@string/broadcast_off"
-        app:layout_constraintBottom_toTopOf="@+id/btnOffD9"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineChart" />
 
     <Button
         android:id="@+id/btnSingleRead"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="2dp"
         android:text="@string/single_read"
-        app:layout_constraintBottom_toTopOf="@+id/btnOffD9"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnBroadcastOff" />
 
     <Button
         android:id="@+id/btnOnD3"
@@ -116,22 +124,6 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btnOnD8"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/d8_on"
-        app:layout_constraintBottom_toTopOf="@+id/btnOnD7"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btnOnD9"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/d9_on"
-        app:layout_constraintBottom_toTopOf="@+id/btnOnD8"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/btnOffD3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -169,22 +161,6 @@
         android:layout_height="wrap_content"
         android:text="@string/d7_off"
         app:layout_constraintBottom_toTopOf="@+id/btnOffD6"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/btnOffD8"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/d8_off"
-        app:layout_constraintBottom_toTopOf="@+id/btnOffD7"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/btnOffD9"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/d9_off"
-        app:layout_constraintBottom_toTopOf="@+id/btnOffD8"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

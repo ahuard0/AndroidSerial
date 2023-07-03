@@ -21,8 +21,8 @@ import java.util.HashMap;
 public class SerialClient implements AutoCloseable {
     public static final String ACTION_USB_PERMISSION = "com.huard.androidserial.USB_PERMISSION";
     private static PendingIntent intentPermissionUSB;
-    private static final int USB_VENDOR_ID = 10755; // Arduino
-    private static final int USB_PRODUCT_ID = 67; // Arduino Uno
+    private static final int[] USB_VENDOR_IDs = {9025, 10755}; // Arduino
+    private static final int[] USB_PRODUCT_IDs = {67}; // Arduino Uno
     public static UsbEndpoint inputEndpoint;
     public static UsbEndpoint outputEndpoint;
     public static UsbDeviceConnection connection;
@@ -54,9 +54,13 @@ public class SerialClient implements AutoCloseable {
         HashMap<String, UsbDevice> deviceList = manager.getDeviceList();
         if (!deviceList.isEmpty()) {
             for (UsbDevice device : deviceList.values()) {
-                if (device.getVendorId() == USB_VENDOR_ID && device.getProductId() == USB_PRODUCT_ID) {
-                    SerialClient.device = device;
-                    break;
+                for (int vendorId : USB_VENDOR_IDs) {
+                    for (int productId : USB_PRODUCT_IDs) {
+                        if (device.getVendorId() == vendorId && device.getProductId() == productId) {
+                            SerialClient.device = device;
+                            break;
+                        }
+                    }
                 }
             }
             if (device != null) {
@@ -239,11 +243,14 @@ public class SerialClient implements AutoCloseable {
 
     @Override
     public void close() throws NullPointerException {
-        monitor.quit();
-        connection.releaseInterface(usbInterface);
-        connection.close();
-        connection = null;
-        updateConnectionStatus("Disconnected");
-        updateTerminalStatus("Closed Connection");
+        if (monitor != null)
+            monitor.quit();
+        if (connection != null) {
+            connection.releaseInterface(usbInterface);
+            connection.close();
+            connection = null;
+            updateConnectionStatus("Disconnected");
+            updateTerminalStatus("Closed Connection");
+        }
     }
 }
