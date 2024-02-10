@@ -8,6 +8,7 @@ android {
 
     defaultConfig {
         minSdk 25
+        //noinspection OldTargetApi
         targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -33,7 +34,8 @@ android {
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
+    //noinspection GradleDependency
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'com.github.mik3y:usb-serial-for-android:3.5.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
