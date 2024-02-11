@@ -11,18 +11,13 @@ import com.hoho.android.usbserial.driver.UsbSerialProber;
 import java.io.IOException;
 import java.util.List;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.Entry;
-
 public class SerialMonitor extends Thread implements AutoCloseable {
 
     private boolean running;
     private StringBuilder searchStr;
     private String msg;
 
-    public Handler terminalHandler;
+    public final Handler terminalHandler;
 
     private final SerialClient client;
 

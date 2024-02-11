@@ -15,4 +15,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AndroidSerial"
 include ':app'
-include ':app:alerts'

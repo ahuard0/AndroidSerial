@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 
 public class SerialClient implements AutoCloseable {
@@ -124,7 +125,7 @@ public class SerialClient implements AutoCloseable {
             @Override
             public void onReceive(Context context, @NonNull Intent intent) {
                 String action = intent.getAction();
-                if (action.equals(UsbManager.ACTION_USB_DEVICE_DETACHED)) {
+                if (Objects.equals(action, UsbManager.ACTION_USB_DEVICE_DETACHED)) {
                     if (monitor != null)
                         monitor.quit();  // gracefully shut down
                     client.close();
@@ -142,7 +143,7 @@ public class SerialClient implements AutoCloseable {
             @Override
             public void onReceive(Context context, @NonNull Intent intent) {
                 String action = intent.getAction();
-                if (action.equals(UsbManager.ACTION_USB_DEVICE_ATTACHED))
+                if (Objects.equals(action, UsbManager.ACTION_USB_DEVICE_ATTACHED))
                     requestUsbPermission();
             }
         };
