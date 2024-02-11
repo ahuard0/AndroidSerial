@@ -11,10 +11,13 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+
 import java.util.HashMap;
 
 
@@ -35,6 +38,7 @@ public class SerialClient implements AutoCloseable {
     public static Handler terminalHandler;
     public static Handler connectionHandler;
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     public SerialClient(@NonNull Context context, Handler terminalHandler, Handler connectionHandler) {
         SerialClient.terminalHandler = terminalHandler;
         SerialClient.connectionHandler = connectionHandler;
@@ -43,7 +47,7 @@ public class SerialClient implements AutoCloseable {
         manager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
         intentPermissionUSB = PendingIntent.getBroadcast(context, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
 
-        context.registerReceiver(eventPermissionUSB, new IntentFilter(ACTION_USB_PERMISSION));
+        context.registerReceiver(eventPermissionUSB, new IntentFilter(ACTION_USB_PERMISSION), Context.RECEIVER_NOT_EXPORTED);
         context.registerReceiver(eventDisconnectUSB, new IntentFilter(UsbManager.ACTION_USB_DEVICE_DETACHED));
         context.registerReceiver(eventConnectUSB, new IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED));
 
@@ -113,28 +117,36 @@ public class SerialClient implements AutoCloseable {
         terminalHandler.sendMessage(msg);
     }
 
-    public static final BroadcastReceiver eventDisconnectUSB = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, @NonNull Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(UsbManager.ACTION_USB_DEVICE_DETACHED)) {
-                if (monitor != null)
-                    monitor.quit();  // gracefully shut down
-                client.close();
-                updateConnectionStatus("Disconnected");
-                updateTerminalStatus("Closed Connection");
-            }
-        }
-    };
+    public static final BroadcastReceiver eventDisconnectUSB;
 
-    public static final BroadcastReceiver eventConnectUSB = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, @NonNull Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(UsbManager.ACTION_USB_DEVICE_ATTACHED))
-                requestUsbPermission();
-        }
-    };
+    static {
+        eventDisconnectUSB = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, @NonNull Intent intent) {
+                String action = intent.getAction();
+                if (action.equals(UsbManager.ACTION_USB_DEVICE_DETACHED)) {
+                    if (monitor != null)
+                        monitor.quit();  // gracefully shut down
+                    client.close();
+                    updateConnectionStatus("Disconnected");
+                    updateTerminalStatus("Closed Connection");
+                }
+            }
+        };
+    }
+
+    public static final BroadcastReceiver eventConnectUSB;
+
+    static {
+        eventConnectUSB = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, @NonNull Intent intent) {
+                String action = intent.getAction();
+                if (action.equals(UsbManager.ACTION_USB_DEVICE_ATTACHED))
+                    requestUsbPermission();
+            }
+        };
+    }
 
     public static void logDiagnostics() {
         if (device != null) {  // permission granted, do something with the device

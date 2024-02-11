@@ -1,8 +1,10 @@
 package com.huard.androidserial;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements StatusConnectedLi
 
     private static final int MAX_DATA_POINTS = 300;
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements StatusConnectedLi
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void initialize() {
         lblTerminal = findViewById(R.id.lblTerminal);
         lblConnected = findViewById(R.id.lblConnected);
@@ -140,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements StatusConnectedLi
                 float value = Float.parseFloat(values[0]);
 
                 // Get the entries list for the current pin
-                List<Entry> pinEntries = (List<Entry>) dataSet.getValues();
+                List<Entry> pinEntries = dataSet.getValues();
 
                 // Create a new Entry with the updated value and x-coordinate
                 Entry newEntry = new Entry(count, value);
@@ -204,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements StatusConnectedLi
         // Compute the checksum for the message without the checksum field
         int computedChecksum = 0;
         for (char c : messageWithoutChecksum.toCharArray()) {
-            computedChecksum += (int) c;
+            computedChecksum += c;
         }
 
         try {
@@ -219,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements StatusConnectedLi
         lblConnected.setText(msg);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void onPressConnect() {
         connect();
     }
@@ -279,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements StatusConnectedLi
         client.write("$|_SINGLE_READ\n");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void connect() {
         if (client == null)
             client = new SerialClient(getApplicationContext(), statusTerminalHandler, statusConnectionHandler);
@@ -293,6 +299,7 @@ public class MainActivity extends AppCompatActivity implements StatusConnectedLi
         client = null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onResume() {
         super.onResume();
